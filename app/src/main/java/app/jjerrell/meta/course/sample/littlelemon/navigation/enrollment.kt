@@ -6,8 +6,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import app.jjerrell.meta.course.sample.littlelemon.AppFlow
 import app.jjerrell.meta.course.sample.littlelemon.AppFlowRoute
-import app.jjerrell.meta.course.sample.littlelemon.composables.CheckOnboarding
-import app.jjerrell.meta.course.sample.littlelemon.composables.OnboardingPage
+import app.jjerrell.meta.course.sample.littlelemon.composables.onboarding.CheckOnboarding
+import app.jjerrell.meta.course.sample.littlelemon.composables.onboarding.OnboardingPage
 
 /**
  * Enrollment navigation "module". Begins with the  [CheckOnboarding] view where the app

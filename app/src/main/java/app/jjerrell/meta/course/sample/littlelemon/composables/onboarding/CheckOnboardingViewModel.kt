@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables
+package app.jjerrell.meta.course.sample.littlelemon.composables.onboarding
 
 import android.content.Context
 import androidx.compose.runtime.getValue

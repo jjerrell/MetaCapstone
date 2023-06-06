@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables
+package app.jjerrell.meta.course.sample.littlelemon.composables.onboarding
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
