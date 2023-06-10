@@ -1,6 +1,5 @@
 package app.jjerrell.meta.course.sample.littlelemon.composables.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,17 +14,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.jjerrell.meta.course.sample.littlelemon.data.model.MenuItem
+import app.jjerrell.meta.course.sample.littlelemon.ui.model.MenuItemAndroid
 import app.jjerrell.meta.course.sample.littlelemon.ui.theme.LittleLemonTheme
 
 @Composable
 fun MenuListItem(
     modifier: Modifier = Modifier,
     usePrimaryColor: Boolean,
-    item: MenuItem
+    item: MenuItemAndroid
 ) {
     Row(
         modifier = modifier
@@ -67,11 +65,12 @@ fun MenuListItem(
                 }
             )
         }
-        Image(
-            painterResource(id = item.image),
-            modifier = Modifier.weight(1F),
-            contentDescription = "An image of the ${item.title} dish"
-        )
+        // TODO: Glide
+//        Image(
+//            painterResource(id = item.imageRes),
+//            modifier = Modifier.weight(1F),
+//            contentDescription = "An image of the ${item.title} dish"
+//        )
     }
 }
 
@@ -80,7 +79,7 @@ fun MenuListItem(
 private fun MenuListItem_Preview() {
     LittleLemonTheme {
         LazyColumn {
-            itemsIndexed(MenuItem.defaultMenu) {index, item ->
+            itemsIndexed(MenuItemAndroid.defaultMenu) { index, item ->
                 MenuListItem(
                     item = item,
                     usePrimaryColor = index % 2 == 0

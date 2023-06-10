@@ -30,7 +30,7 @@ import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLHero
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.MenuListItem
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.ProfileIconNavItem
-import app.jjerrell.meta.course.sample.littlelemon.data.model.MenuItem
+import app.jjerrell.meta.course.sample.littlelemon.ui.model.MenuItemAndroid
 
 @Composable
 @ExperimentalFoundationApi
@@ -40,7 +40,7 @@ fun MainPage(
 ) {
     val viewModel = viewModel<MainPageViewModel>()
     val state = viewModel.stateFlow.collectAsState()
-    val items = viewModel.menuItems.collectAsState(initial = MenuItem.defaultMenu)
+    val items = viewModel.menuItems.collectAsState(initial = MenuItemAndroid.defaultMenu)
     Column(modifier = modifier) {
         LLTopAppBar(
             actions = {
@@ -125,8 +125,8 @@ private fun MainPageHero(
 @Composable
 private fun FilterRow(
     modifier: Modifier = Modifier,
-    categoryFilter: MenuItem.Category?,
-    onSelectCategory: (MenuItem.Category?) -> Unit
+    categoryFilter: MenuItemAndroid.Category?,
+    onSelectCategory: (MenuItemAndroid.Category?) -> Unit
 ) {
     LazyRow(
         modifier = modifier
@@ -140,7 +140,7 @@ private fun FilterRow(
                 Text("All")
             }
         }
-        items(MenuItem.Category.values().asList()) { category ->
+        items(MenuItemAndroid.Category.values().asList()) { category ->
             TextButton(
                 onClick = { onSelectCategory(category) },
                 elevation = if (categoryFilter == category) ButtonDefaults.buttonElevation(defaultElevation = 4.dp) else null
