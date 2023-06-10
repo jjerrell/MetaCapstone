@@ -1,9 +1,9 @@
-package app.jjerrell.meta.course.sample.littlelemon.data
+package app.jjerrell.meta.course.sample.littlelemon.network
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import app.jjerrell.meta.course.sample.littlelemon.data.model.UserRegistration
+import app.jjerrell.meta.course.sample.littlelemon.network.model.UserRegistration
 import app.jjerrell.meta.course.sample.littlelemon.dataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

@@ -1,6 +1,6 @@
-package app.jjerrell.meta.course.sample.littlelemon.data
+package app.jjerrell.meta.course.sample.littlelemon.network
 
-import app.jjerrell.meta.course.sample.littlelemon.data.model.LittleLemonMenuNetwork
+import app.jjerrell.meta.course.sample.littlelemon.network.model.LittleLemonMenuNetwork
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

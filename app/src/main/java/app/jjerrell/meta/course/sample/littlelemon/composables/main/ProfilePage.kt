@@ -31,8 +31,8 @@ import app.jjerrell.meta.course.sample.littlelemon.composables.components.BackIc
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.ProfileIconNavItem
 import app.jjerrell.meta.course.sample.littlelemon.composables.onboarding.OnboardingField
-import app.jjerrell.meta.course.sample.littlelemon.data.model.UserRegistration
-import app.jjerrell.meta.course.sample.littlelemon.data.provideUserDataSource
+import app.jjerrell.meta.course.sample.littlelemon.network.model.UserRegistration
+import app.jjerrell.meta.course.sample.littlelemon.network.provideUserDataSource
 import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {

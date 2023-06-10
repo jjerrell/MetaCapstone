@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.data.model
+package app.jjerrell.meta.course.sample.littlelemon.network.model
 
 data class UserRegistration(
     val firstName: String = "",

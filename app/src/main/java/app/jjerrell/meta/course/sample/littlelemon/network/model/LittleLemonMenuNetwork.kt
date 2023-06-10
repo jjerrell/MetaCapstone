@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.data.model
+package app.jjerrell.meta.course.sample.littlelemon.network.model
 
 
 import kotlinx.serialization.SerialName
