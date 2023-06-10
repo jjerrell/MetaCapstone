@@ -1,6 +1,7 @@
 package app.jjerrell.meta.course.sample.littlelemon.data
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import app.jjerrell.meta.course.sample.littlelemon.data.model.UserRegistration
 import app.jjerrell.meta.course.sample.littlelemon.dataStore
@@ -14,6 +15,7 @@ private val KEY_EMAIL = stringPreferencesKey("email")
 interface IUserDataService {
     val userData: Flow<UserRegistration?>
     suspend fun updateRegistrationData(user: UserRegistration)
+    suspend fun logout(onComplete: () -> Unit)
 }
 
 fun provideUserDataSource(context: Context): IUserDataService = UserDataSource(context)
@@ -42,6 +44,13 @@ private class UserDataSource(val context: Context) : IUserDataService {
                 set(KEY_LAST_NAME, user.lastName)
                 set(KEY_EMAIL, user.email)
             }
+        }
+    }
+
+    override suspend fun logout(onComplete: () -> Unit) {
+        context.dataStore.edit {
+            it.clear()
+            onComplete()
         }
     }
 }
