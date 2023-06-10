@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +39,7 @@ val Context.dataStore by preferencesDataStore(DATA_STORE_NAME)
 // Ktor setup and config
 private const val HTTP_TIME_OUT = 60_000
 
-private val ktorHttpClient = HttpClient(Android) {
+val ktorHttpClient = HttpClient(Android) {
     install(ContentNegotiation) {
         json(Json {
             prettyPrint = true
@@ -79,8 +80,14 @@ private val ktorHttpClient = HttpClient(Android) {
     ExperimentalMaterial3Api::class
 )
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainActivityViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // fetch the menu list and store it in the db
+        viewModel.getAndUpdateMenu()
+        // setup the Jetpack Compose content and NavHost
         setContent {
             val navController = rememberNavController()
             LittleLemonTheme {
