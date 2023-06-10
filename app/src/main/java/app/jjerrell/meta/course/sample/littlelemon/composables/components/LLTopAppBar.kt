@@ -3,8 +3,6 @@ package app.jjerrell.meta.course.sample.littlelemon.composables.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -26,12 +24,10 @@ fun LLTopAppBar(
         title = {
             Image(
                 modifier = Modifier
-                    .width(256.dp)
-                    .height(72.dp)
-                    .padding(top = 20.dp),
+                    .height(48.dp),
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = stringResource(R.string.logo_description),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.FillHeight
             )
         },
         modifier = modifier,
