@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.jjerrell.meta.course.sample.littlelemon.network.provideUserDataSource
+import app.jjerrell.meta.course.sample.littlelemon.domain.database.provideUserDataSource
 import kotlinx.coroutines.launch
 
 class CheckOnboardingViewModel : ViewModel() {

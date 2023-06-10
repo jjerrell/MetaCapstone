@@ -3,10 +3,10 @@ package app.jjerrell.meta.course.sample.littlelemon
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.jjerrell.meta.course.sample.littlelemon.database.model.MenuItemEntity
-import app.jjerrell.meta.course.sample.littlelemon.network.IMenuItemNetworkService
-import app.jjerrell.meta.course.sample.littlelemon.network.MenuItemNetworkService
-import app.jjerrell.meta.course.sample.littlelemon.network.model.LittleLemonMenuNetwork
+import app.jjerrell.meta.course.sample.littlelemon.domain.database.model.MenuItemEntity
+import app.jjerrell.meta.course.sample.littlelemon.domain.network.IMenuItemNetworkService
+import app.jjerrell.meta.course.sample.littlelemon.domain.network.MenuItemNetworkService
+import app.jjerrell.meta.course.sample.littlelemon.domain.network.model.LittleLemonMenuNetwork
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {

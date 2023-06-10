@@ -1,10 +1,10 @@
-package app.jjerrell.meta.course.sample.littlelemon.database
+package app.jjerrell.meta.course.sample.littlelemon.domain.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import app.jjerrell.meta.course.sample.littlelemon.database.model.MenuItemEntity
+import app.jjerrell.meta.course.sample.littlelemon.domain.database.model.MenuItemEntity
 
 @Database(entities = [MenuItemEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {

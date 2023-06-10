@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.database.model
+package app.jjerrell.meta.course.sample.littlelemon.domain.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
