@@ -66,12 +66,14 @@ fun OnboardingPage(
         ) {
             LLHero(
                 modifier = Modifier
-                    .fillMaxHeight(0.25F)
+                    .fillMaxHeight(0.25F),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = stringResource(R.string.registration_hero),
                     color = MaterialTheme.colorScheme.tertiary,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.headlineLarge
                 )
             }
             RegistrationFormFields(

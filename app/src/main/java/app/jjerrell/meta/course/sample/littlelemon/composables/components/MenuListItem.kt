@@ -18,22 +18,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.jjerrell.meta.course.sample.littlelemon.model.MenuItem
+import app.jjerrell.meta.course.sample.littlelemon.data.model.MenuItem
 import app.jjerrell.meta.course.sample.littlelemon.ui.theme.LittleLemonTheme
 
 @Composable
 fun MenuListItem(
     modifier: Modifier = Modifier,
-    isEven: Boolean,
+    usePrimaryColor: Boolean,
     item: MenuItem
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth().then(
-                if (isEven)
-                    Modifier.background(MaterialTheme.colorScheme.secondary)
-                else
+                if (usePrimaryColor)
                     Modifier.background(MaterialTheme.colorScheme.primary)
+                else
+                    Modifier.background(MaterialTheme.colorScheme.secondary)
             )
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -46,7 +46,7 @@ fun MenuListItem(
                 text = item.title,
                 style = MaterialTheme.typography.titleLarge,
                 color = with(MaterialTheme.colorScheme) {
-                    if (isEven) Color.Unspecified
+                    if (usePrimaryColor) Color.Unspecified
                     else onSecondary
                 }
             )
@@ -54,7 +54,7 @@ fun MenuListItem(
                 text = item.description,
                 style = MaterialTheme.typography.bodyLarge,
                 color = with(MaterialTheme.colorScheme) {
-                    if (isEven) Color.Unspecified
+                    if (usePrimaryColor) Color.Unspecified
                     else onSecondary
                 }
             )
@@ -62,7 +62,7 @@ fun MenuListItem(
                 text = "$" + "${item.price}",
                 style = MaterialTheme.typography.headlineLarge,
                 color = with(MaterialTheme.colorScheme) {
-                    if (isEven) Color.Unspecified
+                    if (usePrimaryColor) Color.Unspecified
                     else onSecondary
                 }
             )
@@ -83,7 +83,7 @@ private fun MenuListItem_Preview() {
             itemsIndexed(MenuItem.defaultMenu) {index, item ->
                 MenuListItem(
                     item = item,
-                    isEven = index % 2 == 0
+                    usePrimaryColor = index % 2 == 0
                 )
             }
         }

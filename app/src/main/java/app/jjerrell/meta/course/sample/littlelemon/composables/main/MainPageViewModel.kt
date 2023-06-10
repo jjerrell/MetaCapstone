@@ -1,7 +1,7 @@
 package app.jjerrell.meta.course.sample.littlelemon.composables.main
 
 import androidx.lifecycle.ViewModel
-import app.jjerrell.meta.course.sample.littlelemon.model.MenuItem
+import app.jjerrell.meta.course.sample.littlelemon.data.model.MenuItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 

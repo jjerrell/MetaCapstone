@@ -3,13 +3,11 @@ package app.jjerrell.meta.course.sample.littlelemon.composables.main
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -25,16 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLHero
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.composables.components.MenuListItem
-import app.jjerrell.meta.course.sample.littlelemon.model.MenuItem
-
+import app.jjerrell.meta.course.sample.littlelemon.composables.components.ProfileIconNavItem
+import app.jjerrell.meta.course.sample.littlelemon.data.model.MenuItem
 
 @Composable
 @ExperimentalFoundationApi
@@ -48,22 +44,20 @@ fun MainPage(
     Column(modifier = modifier) {
         LLTopAppBar(
             actions = {
-                Image(
-                    painter = painterResource(id = R.drawable.profile_circle),
-                    contentDescription = stringResource(R.string.profile_image_description),
-                    modifier = Modifier
-                        .size(48.dp, 48.dp)
-                        .clickable(role = Role.Button) {
-                            onNavigateToProfile()
-                        },
-                    contentScale = ContentScale.Fit
+                ProfileIconNavItem(
+                    isEnabled = true,
+                    onNavigateToProfile
                 )
             }
         )
-        LazyColumn {
+        LazyColumn(
+            modifier = modifier
+        ) {
+            // present the hero content
             item {
-                Header()
+                MainPageHero()
             }
+            // pin the search and filter components after the hero scrolls out of view
             stickyHeader {
                 TextField(
                     value = state.value.searchContent,
@@ -75,10 +69,11 @@ fun MainPage(
                     onSelectCategory = { viewModel.updateCategory(it) }
                 )
             }
-            itemsIndexed(items.value) {index, item ->
+            // list the menu items with alternating values for `usePrimaryColor`
+            itemsIndexed(items.value) { index, item ->
                 MenuListItem(
                     item = item,
-                    isEven = index % 2 == 0
+                    usePrimaryColor = index % 2 == 0
                 )
             }
         }
@@ -86,7 +81,7 @@ fun MainPage(
 }
 
 @Composable
-private fun Header(
+private fun MainPageHero(
     modifier: Modifier = Modifier
 ) {
     LLHero(
