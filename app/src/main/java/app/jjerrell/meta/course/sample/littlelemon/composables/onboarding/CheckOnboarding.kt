@@ -34,11 +34,13 @@ fun CheckOnboarding(
     ) {
         if (viewModel.isLoading) {
             LaunchedEffect(key1 = Unit) {
-                viewModel.checkRegistration(context)
+                viewModel.checkRegistration(context = context)
             }
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         } else {
-            onResult(viewModel.isRegistered)
+            LaunchedEffect(key1 = Unit) {
+                onResult(viewModel.isRegistered)
+            }
         }
     }
 }

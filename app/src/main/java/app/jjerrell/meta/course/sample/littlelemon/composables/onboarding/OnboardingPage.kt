@@ -13,73 +13,100 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.Heading
+import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLHero
+import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.ui.theme.LittleLemonTheme
 
-@ExperimentalMaterial3Api
 @Composable
+@ExperimentalComposeUiApi
 @ExperimentalLayoutApi
+@ExperimentalMaterial3Api
 fun OnboardingPage(
     modifier: Modifier = Modifier,
     onRegistrationSuccess: () -> Unit
 ) {
     val viewModel: OnboardingViewModel = viewModel()
-    Column(
-        modifier = modifier
-            .imePadding()
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Heading {
-            Text(
-                text = stringResource(R.string.registration_hero),
-                color = MaterialTheme.colorScheme.tertiary,
-                style = MaterialTheme.typography.bodyLarge
-            )
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    Scaffold(
+        topBar = {
+            LLTopAppBar()
         }
-        RegistrationFormFields(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1F),
-            firstName = viewModel.state.firstName,
-            lastName = viewModel.state.lastName,
-            email = viewModel.state.emailAddress,
-            invalidFields = viewModel.invalidFields.toList(),
-            updateFirstName = { viewModel.update(OnboardingField.FIRST_NAME, it) },
-            updateLastName = { viewModel.update(OnboardingField.LAST_NAME, it) },
-            updateEmail = { viewModel.update(OnboardingField.EMAIL_ADDRESS, it) }
-        )
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(40.dp)
-                .padding(horizontal = 20.dp),
-            onClick = {
-                viewModel.register()
-            },
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-            content = {
-                Text(stringResource(R.string.button_register))
+    ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .padding(paddingValues)
+                .imePadding()
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LLHero(
+                modifier = Modifier
+                    .fillMaxHeight(0.25F)
+            ) {
+                Text(
+                    text = stringResource(R.string.registration_hero),
+                    color = MaterialTheme.colorScheme.tertiary,
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
-        )
-        Spacer(modifier = Modifier.height(30.dp))
+            RegistrationFormFields(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1F),
+                firstName = viewModel.state.firstName,
+                lastName = viewModel.state.lastName,
+                email = viewModel.state.emailAddress,
+                invalidFields = viewModel.invalidFields.toList(),
+                updateFirstName = { viewModel.update(OnboardingField.FIRST_NAME, it) },
+                updateLastName = { viewModel.update(OnboardingField.LAST_NAME, it) },
+                updateEmail = { viewModel.update(OnboardingField.EMAIL_ADDRESS, it) },
+                whenDone = {
+                    focusManager.clearFocus()
+                    viewModel.register(context = context)
+                }
+            )
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .padding(horizontal = 20.dp),
+                onClick = {
+                    focusManager.clearFocus()
+                    viewModel.register(context = context)
+                },
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                content = {
+                    Text(stringResource(R.string.button_register))
+                }
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+        }
+
     }
     /**
      * Waits for the registrationFailed state value to be set to true and presents a dialog explaining
@@ -97,7 +124,9 @@ fun OnboardingPage(
      * Waits for the isRegistered state value to be set to true and then calls the onSuccess callback.
      */
     when (viewModel.state.isRegistered) {
-        true -> onRegistrationSuccess()
+        true -> LaunchedEffect(Unit) {
+            onRegistrationSuccess()
+        }
         else -> {}
     }
 }
@@ -109,6 +138,7 @@ fun OnboardingPage(
  * pattern to perform read/write activities.
  */
 @Composable
+@ExperimentalComposeUiApi
 private fun RegistrationFormFields(
     modifier: Modifier = Modifier,
     firstName: String,
@@ -117,7 +147,8 @@ private fun RegistrationFormFields(
     invalidFields: List<OnboardingField>,
     updateFirstName: (String) -> Unit,
     updateLastName: (String) -> Unit,
-    updateEmail: (String) -> Unit
+    updateEmail: (String) -> Unit,
+    whenDone: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -152,7 +183,11 @@ private fun RegistrationFormFields(
             isError = invalidFields.contains(OnboardingField.EMAIL_ADDRESS),
             keyboardOptions = KeyboardOptions(
                 autoCorrect = false,
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { whenDone() }
             )
         )
     }
@@ -198,8 +233,12 @@ private fun FailedRegistrationAlert(
 
 @Preview(showSystemUi = true)
 @Composable
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
-fun Onboarding_Preview() {
+@OptIn(
+    ExperimentalComposeUiApi::class,
+    ExperimentalLayoutApi::class,
+    ExperimentalMaterial3Api::class
+)
+private fun Onboarding_Preview() {
     LittleLemonTheme(
         dynamicColor = false,
         darkTheme = false

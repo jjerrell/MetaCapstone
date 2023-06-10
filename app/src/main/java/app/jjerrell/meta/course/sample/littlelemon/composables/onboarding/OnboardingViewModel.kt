@@ -1,10 +1,15 @@
 package app.jjerrell.meta.course.sample.littlelemon.composables.onboarding
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import app.jjerrell.meta.course.sample.littlelemon.data.model.UserRegistration
+import app.jjerrell.meta.course.sample.littlelemon.data.provideUserDataSource
+import kotlinx.coroutines.launch
 
 class OnboardingViewModel : ViewModel() {
 
@@ -22,16 +27,24 @@ class OnboardingViewModel : ViewModel() {
         field.updateValidation()
     }
 
-    fun register() {
+    fun register(context: Context) {
         OnboardingField.values().forEach { it.updateValidation() }
-        state = if (invalidFields.isEmpty()) {
-            state.copy(
-                isRegistered = true
+        val dataService = provideUserDataSource(context)
+        viewModelScope.launch {
+            dataService.updateRegistrationData(
+                user = UserRegistration(
+                    firstName = state.firstName,
+                    lastName = state.lastName,
+                    email = state.emailAddress
+                )
             )
-        } else {
-            state.copy(
-                registrationFailed = true
-            )
+            dataService.userData.collect {
+                state = if (it == null) state.copy(
+                    registrationFailed = true
+                ) else state.copy(
+                    isRegistered = true
+                )
+            }
         }
     }
 
