@@ -8,7 +8,7 @@ import app.jjerrell.meta.course.sample.littlelemon.domain.database.model.MenuIte
 
 @Database(entities = [MenuItemEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): MenuItemDao
+    abstract fun menuItemDao(): MenuItemDao
 
     companion object {
         // singleton instance for the database
