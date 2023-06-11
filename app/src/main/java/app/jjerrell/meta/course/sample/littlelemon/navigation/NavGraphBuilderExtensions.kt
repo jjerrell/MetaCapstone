@@ -7,8 +7,6 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import app.jjerrell.meta.course.sample.littlelemon.AppFlow
-import app.jjerrell.meta.course.sample.littlelemon.AppFlowRoute
 
 /**
  * Replacement for [NavGraphBuilder.navigation] which allows for creating type-safe navigation flows

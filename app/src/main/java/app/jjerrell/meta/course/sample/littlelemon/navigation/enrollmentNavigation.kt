@@ -2,12 +2,11 @@ package app.jjerrell.meta.course.sample.littlelemon.navigation
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import app.jjerrell.meta.course.sample.littlelemon.AppFlow
-import app.jjerrell.meta.course.sample.littlelemon.AppFlowRoute
-import app.jjerrell.meta.course.sample.littlelemon.composables.CheckOnboarding
-import app.jjerrell.meta.course.sample.littlelemon.composables.OnboardingPage
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.CheckOnboarding
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.OnboardingPage
 
 /**
  * Enrollment navigation "module". Begins with the  [CheckOnboarding] view where the app
@@ -16,8 +15,9 @@ import app.jjerrell.meta.course.sample.littlelemon.composables.OnboardingPage
  *
  * @param controller the NavHostController for the application
  */
-@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
 @ExperimentalLayoutApi
+@ExperimentalMaterial3Api
 fun NavGraphBuilder.enrollmentNavigation(controller: NavController) {
     // A straightforward implementation of the navigation API
     // used to enable type safe navigation graphs and calls.
@@ -28,13 +28,9 @@ fun NavGraphBuilder.enrollmentNavigation(controller: NavController) {
         page(appRoute = AppFlowRoute.CHECK_ONBOARDING) {
             CheckOnboarding(onResult = { isRegistered: Boolean ->
                 if (isRegistered) {
-                    controller.navigate(AppFlow.MAIN) {
-                        launchSingleTop = true
-                    }
+                    controller.navigate(AppFlow.MAIN)
                 } else {
-                    controller.navigate(AppFlowRoute.REGISTRATION) {
-                        launchSingleTop = true
-                    }
+                    controller.navigate(AppFlowRoute.REGISTRATION)
                 }
             })
         }
@@ -42,9 +38,7 @@ fun NavGraphBuilder.enrollmentNavigation(controller: NavController) {
         page(appRoute = AppFlowRoute.REGISTRATION) {
             OnboardingPage(
                 onRegistrationSuccess = {
-                    controller.navigate(AppFlow.MAIN) {
-                        launchSingleTop = true
-                    }
+                    controller.navigate(AppFlow.MAIN)
                 }
             )
         }

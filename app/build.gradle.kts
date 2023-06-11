@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -54,6 +56,8 @@ dependencies {
     // https://developer.android.com/jetpack/compose/bom
     val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
     val navVersion = "2.5.3"
+    val ktorVersion = "2.1.3"
+    val roomVersion = "2.5.1"
 
     implementation(composeBom)
 
@@ -67,6 +71,22 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    // ktor
+    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
+
+    // room
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+    // test
     testImplementation("junit:junit:4.13.2")
 
     androidTestImplementation(composeBom)

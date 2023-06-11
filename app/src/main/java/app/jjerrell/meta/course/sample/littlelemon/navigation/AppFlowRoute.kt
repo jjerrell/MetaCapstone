@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon
+package app.jjerrell.meta.course.sample.littlelemon.navigation
 
 /**
  * Definitions for a specific navigation hierarchy within the app
@@ -27,4 +27,3 @@ value class AppFlowRoute private constructor(val path: String) {
         val PROFILE: AppFlowRoute = AppFlowRoute("profile")
     }
 }
-
