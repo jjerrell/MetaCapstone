@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.onboarding
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding
 
 import android.content.Context
 import androidx.compose.runtime.getValue
@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.jjerrell.meta.course.sample.littlelemon.domain.database.provideUserDataSource
+import app.jjerrell.meta.course.sample.littlelemon.domain.LittleLemonUseCase
 import kotlinx.coroutines.launch
 
 class CheckOnboardingViewModel : ViewModel() {
@@ -19,9 +19,8 @@ class CheckOnboardingViewModel : ViewModel() {
      * Checks for previous user registration and sets the [isRegistered] value accordingly
      */
     fun checkRegistration(context: Context) {
-        val dataSource = provideUserDataSource(context)
         viewModelScope.launch {
-            dataSource.userData.collect {
+            LittleLemonUseCase.getUseCase(context).registration.collect {
                 isRegistered = it != null
                 isLoading = false
             }

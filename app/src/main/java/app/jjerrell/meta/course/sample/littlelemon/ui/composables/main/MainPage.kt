@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.main
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,23 +14,29 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLHero
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLTopAppBar
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.MenuListItem
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.ProfileIconNavItem
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.MenuListItem
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.ProfileIconNavItem
 import app.jjerrell.meta.course.sample.littlelemon.ui.model.MenuItemAndroid
 
 @Composable
@@ -39,6 +46,7 @@ fun MainPage(
     onNavigateToProfile: () -> Unit,
 ) {
     val viewModel = viewModel<MainPageViewModel>()
+    val context = LocalContext.current
     val state = viewModel.stateFlow.collectAsState()
     val items = viewModel.menuItems.collectAsState(initial = MenuItemAndroid.defaultMenu)
     Column(modifier = modifier) {
@@ -50,31 +58,56 @@ fun MainPage(
                 )
             }
         )
-        LazyColumn(
-            modifier = modifier
-        ) {
-            // present the hero content
-            item {
-                MainPageHero()
+        if (state.value.isLoading) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // request the content
+                LaunchedEffect(key1 = Unit) {
+                    viewModel.fetchMenuItems(context = context)
+                }
+                // add the loading indicator
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
-            // pin the search and filter components after the hero scrolls out of view
-            stickyHeader {
-                TextField(
-                    value = state.value.searchContent,
-                    onValueChange = { viewModel.updateSearchContent(it) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                FilterRow(
-                    categoryFilter = state.value.category,
-                    onSelectCategory = { viewModel.updateCategory(it) }
-                )
-            }
-            // list the menu items with alternating values for `usePrimaryColor`
-            itemsIndexed(items.value) { index, item ->
-                MenuListItem(
-                    item = item,
-                    usePrimaryColor = index % 2 == 0
-                )
+        } else {
+            LazyColumn {
+                // present the hero content
+                item {
+                    MainPageHero()
+                }
+                // pin the search and filter components after the hero scrolls out of view
+                stickyHeader {
+                    val availableCategories by remember {
+                        mutableStateOf(
+                            state.value.menuItems.map { it.category }.toSet()
+                        )
+                    }
+                    TextField(
+                        value = state.value.searchContent,
+                        onValueChange = { viewModel.updateSearchContent(it) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    FilterRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        categories = availableCategories
+                            .filter { category ->
+                                state.value.menuItems.any { it.category == category }
+                            }
+                            .sortedBy { it.ordinal }
+                            .toSet(),
+                        categoryFilter = state.value.category,
+                        onSelectCategory = { viewModel.updateCategory(it) }
+                    )
+                }
+                // list the menu items with alternating values for `usePrimaryColor`
+                itemsIndexed(items.value) { index, item ->
+                    MenuListItem(
+                        item = item,
+                        usePrimaryColor = index % 2 == 0
+                    )
+                }
             }
         }
     }
@@ -125,12 +158,14 @@ private fun MainPageHero(
 @Composable
 private fun FilterRow(
     modifier: Modifier = Modifier,
+    categories: Set<MenuItemAndroid.Category>,
     categoryFilter: MenuItemAndroid.Category?,
     onSelectCategory: (MenuItemAndroid.Category?) -> Unit
 ) {
     LazyRow(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.tertiary)
+            .background(MaterialTheme.colorScheme.tertiary),
+        horizontalArrangement = Arrangement.Center
     ) {
         item {
             TextButton(
@@ -140,7 +175,7 @@ private fun FilterRow(
                 Text("All")
             }
         }
-        items(MenuItemAndroid.Category.values().asList()) { category ->
+        items(categories.toList()) { category ->
             TextButton(
                 onClick = { onSelectCategory(category) },
                 elevation = if (categoryFilter == category) ButtonDefaults.buttonElevation(defaultElevation = 4.dp) else null

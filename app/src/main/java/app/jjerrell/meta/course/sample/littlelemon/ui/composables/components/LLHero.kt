@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.components
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

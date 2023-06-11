@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.onboarding
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

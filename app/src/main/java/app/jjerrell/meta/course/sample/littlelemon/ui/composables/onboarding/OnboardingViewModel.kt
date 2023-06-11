@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.onboarding
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding
 
 import android.content.Context
 import androidx.compose.runtime.getValue
@@ -7,11 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.jjerrell.meta.course.sample.littlelemon.domain.LittleLemonUseCase
 import app.jjerrell.meta.course.sample.littlelemon.domain.network.model.UserRegistration
-import app.jjerrell.meta.course.sample.littlelemon.domain.database.provideUserDataSource
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel : ViewModel() {
+    private lateinit var useCase: LittleLemonUseCase
 
     var state: OnboardingState by mutableStateOf(OnboardingState())
         private set
@@ -28,17 +29,19 @@ class OnboardingViewModel : ViewModel() {
     }
 
     fun register(context: Context) {
+        if (!this::useCase.isInitialized) {
+            useCase = LittleLemonUseCase.getUseCase(context)
+        }
         OnboardingField.values().forEach { it.updateValidation() }
-        val dataService = provideUserDataSource(context)
         viewModelScope.launch {
-            dataService.updateRegistrationData(
+            useCase.registerUser(
                 user = UserRegistration(
                     firstName = state.firstName,
                     lastName = state.lastName,
                     email = state.emailAddress
                 )
             )
-            dataService.userData.collect {
+            useCase.registration.collect {
                 state = if (it == null) state.copy(
                     registrationFailed = true
                 ) else state.copy(

@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.onboarding
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -37,8 +37,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLHero
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLTopAppBar
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.ui.theme.LittleLemonTheme
 
 @Composable

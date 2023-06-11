@@ -3,8 +3,8 @@ package app.jjerrell.meta.course.sample.littlelemon.navigation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import app.jjerrell.meta.course.sample.littlelemon.composables.main.MainPage
-import app.jjerrell.meta.course.sample.littlelemon.composables.main.ProfilePage
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.main.MainPage
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.main.ProfilePage
 
 @ExperimentalFoundationApi
 fun NavGraphBuilder.mainNavigation(

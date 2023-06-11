@@ -5,8 +5,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import app.jjerrell.meta.course.sample.littlelemon.composables.onboarding.CheckOnboarding
-import app.jjerrell.meta.course.sample.littlelemon.composables.onboarding.OnboardingPage
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.CheckOnboarding
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.OnboardingPage
 
 /**
  * Enrollment navigation "module". Begins with the  [CheckOnboarding] view where the app

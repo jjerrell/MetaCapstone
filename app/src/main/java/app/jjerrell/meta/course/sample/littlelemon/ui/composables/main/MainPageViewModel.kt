@@ -1,23 +1,36 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.main
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.main
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import app.jjerrell.meta.course.sample.littlelemon.domain.LittleLemonUseCase
 import app.jjerrell.meta.course.sample.littlelemon.ui.model.MenuItemAndroid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class MainPageViewModel : ViewModel() {
     var stateFlow = MutableStateFlow(MainPageUiState())
         private set
 
     val menuItems = stateFlow.map { uiState ->
-        _menuItems.filter { item ->
+        uiState.menuItems.filter { item ->
             uiState.category?.let {
                 item.category == it
             } ?: true && item.matches()
         }
     }
 
-    private val _menuItems: List<MenuItemAndroid> = MenuItemAndroid.defaultMenu
+    fun fetchMenuItems(context: Context) {
+        val useCase = LittleLemonUseCase.getUseCase(context)
+        viewModelScope.launch {
+            val currentState = stateFlow.value
+            stateFlow.value = currentState.copy(
+                isLoading = false,
+                menuItems = useCase.getMenuItems()
+            )
+        }
+    }
 
     fun updateSearchContent(text: String) {
         val currentState = stateFlow.value
@@ -39,6 +52,8 @@ class MainPageViewModel : ViewModel() {
 }
 
 data class MainPageUiState(
-    var searchContent: String = "",
-    var category: MenuItemAndroid.Category? = null
+    val isLoading: Boolean = true,
+    val searchContent: String = "",
+    val category: MenuItemAndroid.Category? = null,
+    val menuItems: List<MenuItemAndroid> = emptyList()
 )

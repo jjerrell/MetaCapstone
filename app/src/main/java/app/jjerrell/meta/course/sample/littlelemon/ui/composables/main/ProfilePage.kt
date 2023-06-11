@@ -1,4 +1,4 @@
-package app.jjerrell.meta.course.sample.littlelemon.composables.main
+package app.jjerrell.meta.course.sample.littlelemon.ui.composables.main
 
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.BackIconNavItem
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.LLTopAppBar
-import app.jjerrell.meta.course.sample.littlelemon.composables.components.ProfileIconNavItem
-import app.jjerrell.meta.course.sample.littlelemon.composables.onboarding.OnboardingField
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.BackIconNavItem
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.ProfileIconNavItem
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.OnboardingField
 import app.jjerrell.meta.course.sample.littlelemon.domain.network.model.UserRegistration
 import app.jjerrell.meta.course.sample.littlelemon.domain.database.provideUserDataSource
 import kotlinx.coroutines.launch
