@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,13 +13,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +33,7 @@ import app.jjerrell.meta.course.sample.littlelemon.R
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.MenuListItem
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.PageLoadingIndicator
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.ProfileIconNavItem
 import app.jjerrell.meta.course.sample.littlelemon.ui.model.MenuItemAndroid
 
@@ -48,7 +46,7 @@ fun MainPage(
     val viewModel = viewModel<MainPageViewModel>()
     val context = LocalContext.current
     val state = viewModel.stateFlow.collectAsState()
-    val items = viewModel.menuItems.collectAsState(initial = MenuItemAndroid.defaultMenu)
+    val items = viewModel.menuItems.collectAsState(emptyList())
     Column(modifier = modifier) {
         LLTopAppBar(
             actions = {
@@ -59,18 +57,11 @@ fun MainPage(
             }
         )
         if (state.value.isLoading) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // request the content
-                LaunchedEffect(key1 = Unit) {
+            PageLoadingIndicator(
+                onInitialize = {
                     viewModel.fetchMenuItems(context = context)
                 }
-                // add the loading indicator
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            }
+            )
         } else {
             LazyColumn {
                 // present the hero content

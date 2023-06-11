@@ -1,6 +1,5 @@
 package app.jjerrell.meta.course.sample.littlelemon.ui.composables.main
 
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,50 +10,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.BackIconNavItem
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.PageLoadingIndicator
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.ProfileIconNavItem
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.OnboardingField
-import app.jjerrell.meta.course.sample.littlelemon.domain.network.model.UserRegistration
-import app.jjerrell.meta.course.sample.littlelemon.domain.database.provideUserDataSource
-import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
-    var state: UserRegistration? by mutableStateOf(null)
-        private set
-
-    fun loadUserData(context: Context) {
-        val dataService = provideUserDataSource(context)
-        viewModelScope.launch {
-            dataService.userData.collect {
-                state = it
-            }
-        }
-    }
-
-    fun logout(context: Context, whenCleared: () -> Unit) {
-        val dataService = provideUserDataSource(context)
-        viewModelScope.launch {
-            dataService.logout(whenCleared)
-        }
-    }
-}
 
 @Composable
 fun ProfilePage(
@@ -78,17 +47,11 @@ fun ProfilePage(
         )
         when (val currentState = viewModel.state) {
             null -> {
-                Column(
-                    modifier = modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    LaunchedEffect(key1 = Unit) {
+                PageLoadingIndicator(
+                    onInitialize = {
                         viewModel.loadUserData(context = context)
                     }
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                }
+                )
             }
             else -> {
                 LazyColumn(
