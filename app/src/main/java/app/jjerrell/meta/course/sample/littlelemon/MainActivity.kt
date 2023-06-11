@@ -26,7 +26,6 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -73,11 +72,12 @@ val ktorHttpClient = HttpClient(Android) {
         level = LogLevel.ALL
     }
 
-    install(ResponseObserver) {
-        onResponse { response ->
-            Log.d("HTTP status:", "${response.status.value}")
-        }
-    }
+//    install(ResponseObserver) {
+//        onResponse { response ->
+//            Log.d("HTTP status:", "${response.status.value}")
+//            Log.d("HTTP body:", response.bodyAsText())
+//        }
+//    }
 
     install(DefaultRequest) {
         header(HttpHeaders.ContentType, ContentType.Application.Json)

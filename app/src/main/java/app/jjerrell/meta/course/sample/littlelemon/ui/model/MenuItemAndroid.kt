@@ -9,10 +9,20 @@ data class MenuItemAndroid(
 ) {
     enum class Category {
         Appetizer,
-        Salad,
-        Seafood,
+        Mains,
         Dessert,
-        Pasta;
+        Misc;
+
+        companion object {
+            fun fromServiceName(category: String): Category {
+                return when (category) {
+                    "desserts" -> Dessert
+                    "starters" -> Appetizer
+                    "mains" -> Mains
+                    else -> Misc
+                }
+            }
+        }
     }
 
     companion object {
@@ -27,14 +37,14 @@ data class MenuItemAndroid(
             MenuItemAndroid(
                 title = "Greek Salad",
                 description = "Crisp romaine, tomatoes, cucumbers, olives, feta cheese. Tangy lemon dressing. Refreshing taste of Greece in a salad.",
-                category = Category.Salad,
+                category = Category.Appetizer,
                 imageUri = "https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/greekSalad.jpg?raw=true",
                 price = 10.99
             ),
             MenuItemAndroid(
                 title = "Grilled Fish",
                 description = "Tender, seasoned fillet with roasted veggies. Zesty lemon herb sauce. A seaside delight from the Mediterranean.",
-                category = Category.Seafood,
+                category = Category.Mains,
                 imageUri = "https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/grilledFish.jpg?raw=true",
                 price = 18.99
             ),
@@ -48,7 +58,7 @@ data class MenuItemAndroid(
             MenuItemAndroid(
                 title = "Pasta",
                 description = "Al dente pasta in tomato sauce with garlic, basil, and chili flakes. Rustic flavors from Mediterranean trattorias. Bon appétit!",
-                category = Category.Pasta,
+                category = Category.Mains,
                 imageUri = "https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/pasta.jpg?raw=true",
                 price = 14.99
             ),
