@@ -22,6 +22,7 @@ fun CheckOnboarding(
     val context = LocalContext.current
     PageLoadingIndicator(
         modifier = modifier,
+        isLoading = viewModel.isLoading,
         onInitialize = {
             if (viewModel.isLoading) {
                 viewModel.checkRegistration(context = context)

@@ -4,28 +4,30 @@ import android.content.Context
 import app.jjerrell.meta.course.sample.littlelemon.database
 import app.jjerrell.meta.course.sample.littlelemon.domain.database.model.MenuItemEntity
 import app.jjerrell.meta.course.sample.littlelemon.domain.database.provideUserDataSource
-import app.jjerrell.meta.course.sample.littlelemon.domain.network.MenuItemNetworkService
 import app.jjerrell.meta.course.sample.littlelemon.domain.network.model.UserRegistration
+import app.jjerrell.meta.course.sample.littlelemon.domain.network.provideMenuItemNetworkService
 import app.jjerrell.meta.course.sample.littlelemon.ktorHttpClient
 import app.jjerrell.meta.course.sample.littlelemon.ui.model.MenuItemAndroid
 
 class LittleLemonUseCase private constructor(context: Context) {
     private val repository = LittleLemonRepository(
         applicationDatabase = context.database,
-        menuService = MenuItemNetworkService(ktorHttpClient),
+        menuService = provideMenuItemNetworkService(ktorHttpClient),
         userService = provideUserDataSource(context)
     )
 
     val registration = repository.registration
 
-    suspend fun getMenuItems(force: Boolean = false): List<MenuItemAndroid> {
-        val dbResponse = repository.getMenuItems()
-        return if (dbResponse.isEmpty() || force) {
-            repository.refreshMenuItems()
-        } else {
-            dbResponse
-        }.map { it.convertToAndroid() }
-    }
+    suspend fun getMenuItems(
+        force: Boolean = false
+    ): List<MenuItemAndroid> = if (force) {
+        // make sure we have the latest response from the server
+        repository.refreshMenuItems(force = true)
+    } else {
+        // just query the database directly. Note that this can lead to a scenario which behaves
+        // exactly as if this function was invoked with `force = true`
+        repository.getMenuItems()
+    }.map { it.convertToAndroid() }
 
     suspend fun registerUser(
         user: UserRegistration
