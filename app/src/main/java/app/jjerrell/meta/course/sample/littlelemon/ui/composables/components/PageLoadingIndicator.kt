@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun PageLoadingIndicator(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     onInitialize: () -> Unit
 ) {
     Column(
@@ -21,7 +22,7 @@ fun PageLoadingIndicator(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        LaunchedEffect(key1 = Unit) {
+        LaunchedEffect(key1 = isLoading) {
             onInitialize()
         }
         CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)

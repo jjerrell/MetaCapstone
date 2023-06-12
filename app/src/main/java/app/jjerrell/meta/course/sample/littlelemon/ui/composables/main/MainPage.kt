@@ -58,6 +58,7 @@ fun MainPage(
         )
         if (state.value.isLoading) {
             PageLoadingIndicator(
+                isLoading = true,
                 onInitialize = {
                     viewModel.fetchMenuItems(context = context)
                 }

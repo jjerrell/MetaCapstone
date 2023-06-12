@@ -14,7 +14,7 @@ class MainActivityViewModel : ViewModel() {
             useCase = LittleLemonUseCase.getUseCase(context)
         }
         viewModelScope.launch {
-            useCase.getMenuItems()
+            useCase.getMenuItems(force = true)
         }
     }
 }

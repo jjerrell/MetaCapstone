@@ -12,10 +12,16 @@ interface IMenuItemNetworkService {
     suspend fun getMenu(): LittleLemonMenuNetwork
 }
 
-class MenuItemNetworkService(private val httpClient: HttpClient) : IMenuItemNetworkService {
+fun provideMenuItemNetworkService(client: HttpClient): IMenuItemNetworkService =
+    MenuItemNetworkService(httpClient = client)
+
+private class MenuItemNetworkService(val httpClient: HttpClient) : IMenuItemNetworkService {
     override suspend fun getMenu(): LittleLemonMenuNetwork {
+        // make the network request
         val request = httpClient.get(MENU_ENDPOINT)
+        // unwrap the text because the payload is Content-Type: text/plain
         val jsonString = request.bodyAsText()
+        // manually run the response through the Json decoder
         return Json.decodeFromString(jsonString)
     }
 }

@@ -48,6 +48,7 @@ fun ProfilePage(
         when (val currentState = viewModel.state) {
             null -> {
                 PageLoadingIndicator(
+                    isLoading = true,
                     onInitialize = {
                         viewModel.loadUserData(context = context)
                     }
