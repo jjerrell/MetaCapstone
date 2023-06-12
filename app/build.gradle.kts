@@ -58,6 +58,7 @@ dependencies {
     val navVersion = "2.5.3"
     val ktorVersion = "2.1.3"
     val roomVersion = "2.5.1"
+    val glideVersion = "4.14.2"
 
     implementation(composeBom)
 
@@ -85,6 +86,10 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    // glide
+    implementation("com.github.bumptech.glide:glide:$glideVersion")
+    ksp("com.github.bumptech.glide:ksp:$glideVersion")
 
     // test
     testImplementation("junit:junit:4.13.2")
