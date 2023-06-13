@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,15 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -52,6 +49,7 @@ fun OnboardingPage(
     val viewModel: OnboardingViewModel = viewModel()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+
     Scaffold(
         topBar = {
             LLTopAppBar()
@@ -76,10 +74,15 @@ fun OnboardingPage(
                     style = MaterialTheme.typography.headlineLarge
                 )
             }
+            when (viewModel.state.registrationFailed) {
+                true -> Text(stringResource(R.string.form_input_invalid))
+                else -> {}
+            }
             RegistrationFormFields(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(1F),
+                isLoading = viewModel.state.isLoading,
                 firstName = viewModel.state.firstName,
                 lastName = viewModel.state.lastName,
                 email = viewModel.state.emailAddress,
@@ -93,34 +96,22 @@ fun OnboardingPage(
                 }
             )
             Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .padding(horizontal = 20.dp),
                 onClick = {
                     focusManager.clearFocus()
                     viewModel.register(context = context)
                 },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .padding(horizontal = 20.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                enabled = !viewModel.state.isLoading,
                 content = {
                     Text(stringResource(R.string.button_register))
                 }
             )
             Spacer(modifier = Modifier.height(30.dp))
         }
-
-    }
-    /**
-     * Waits for the registrationFailed state value to be set to true and presents a dialog explaining
-     * which fields are invalid for a successful registration. Invalid fields will be highlighted when
-     * the user closes the dialog via implicit or explicit dismissal.
-     */
-    when (viewModel.state.registrationFailed) {
-        true -> FailedRegistrationAlert(
-            invalidFields = viewModel.invalidFields,
-            onClose = { viewModel.resetRegistration() }
-        )
-        false -> {}
     }
     /**
      * Waits for the isRegistered state value to be set to true and then calls the onSuccess callback.
@@ -143,6 +134,7 @@ fun OnboardingPage(
 @ExperimentalComposeUiApi
 private fun RegistrationFormFields(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     firstName: String,
     lastName: String,
     email: String,
@@ -159,6 +151,7 @@ private fun RegistrationFormFields(
     ) {
         TextField(
             value = firstName,
+            enabled = !isLoading,
             onValueChange = { updateFirstName(it) },
             modifier = Modifier.fillMaxWidth(),
             label = {
@@ -168,6 +161,7 @@ private fun RegistrationFormFields(
         )
         TextField(
             value = lastName,
+            enabled = !isLoading,
             onValueChange = { updateLastName(it) },
             modifier = Modifier.fillMaxWidth(),
             label = {
@@ -177,6 +171,7 @@ private fun RegistrationFormFields(
         )
         TextField(
             value = email,
+            enabled = !isLoading,
             onValueChange = { updateEmail(it) },
             modifier = Modifier.fillMaxWidth(),
             label = {
@@ -192,42 +187,13 @@ private fun RegistrationFormFields(
                 onDone = { whenDone() }
             )
         )
-    }
-}
-
-@Composable
-@ExperimentalMaterial3Api
-private fun FailedRegistrationAlert(
-    modifier: Modifier = Modifier,
-    invalidFields: List<OnboardingField>,
-    onClose: () -> Unit
-) {
-    AlertDialog(onDismissRequest = onClose) {
-        Surface(
-            modifier = modifier,
-            shape = RoundedCornerShape(12),
-            tonalElevation = 4.dp
-        ) {
-            Column(Modifier.padding(10.dp)) {
-                Text(stringResource(R.string.form_input_invalid))
-                invalidFields.forEach {
-                    when (it) {
-                        OnboardingField.FIRST_NAME -> Text(stringResource(R.string.form_first_name_invalid))
-                        OnboardingField.LAST_NAME -> Text(stringResource(R.string.form_last_name_invalid))
-                        OnboardingField.EMAIL_ADDRESS -> Text(stringResource(R.string.form_email_invalid))
-                    }
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = onClose
-                    ) {
-                        Text(stringResource(R.string.button_close))
-                    }
-                }
+        if (isLoading) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(12.dp))
+                CircularProgressIndicator()
             }
         }
     }

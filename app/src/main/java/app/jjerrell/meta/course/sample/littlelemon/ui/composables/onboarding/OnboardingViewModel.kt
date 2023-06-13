@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.jjerrell.meta.course.sample.littlelemon.domain.LittleLemonUseCase
 import app.jjerrell.meta.course.sample.littlelemon.domain.network.model.UserRegistration
+import app.jjerrell.meta.course.sample.littlelemon.util.string.isProbablyValidEmail
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel : ViewModel() {
@@ -33,21 +34,26 @@ class OnboardingViewModel : ViewModel() {
             useCase = LittleLemonUseCase.getUseCase(context)
         }
         OnboardingField.values().forEach { it.updateValidation() }
-        viewModelScope.launch {
-            useCase.registerUser(
-                user = UserRegistration(
-                    firstName = state.firstName,
-                    lastName = state.lastName,
-                    email = state.emailAddress
-                )
-            )
-            useCase.registration.collect {
-                state = if (it == null) state.copy(
-                    registrationFailed = true
-                ) else state.copy(
-                    isRegistered = true
-                )
+        state = state.copy(isLoading = true, registrationFailed = false)
+        if (invalidFields.isEmpty()) {
+            viewModelScope.launch {
+                    useCase.registerUser(
+                        user = UserRegistration(
+                            firstName = state.firstName,
+                            lastName = state.lastName,
+                            email = state.emailAddress
+                        )
+                    )
+                    useCase.registration.collect {
+                        state = if (it == null) state.copy(
+                            registrationFailed = true
+                        ) else state.copy(
+                            isRegistered = true
+                        )
+                    }
             }
+        } else {
+            state = state.copy(registrationFailed = true)
         }
     }
 
@@ -61,27 +67,15 @@ class OnboardingViewModel : ViewModel() {
         } else if (!invalidFields.contains(this)) {
             invalidFields.add(this)
         }
+        if (invalidFields.isEmpty()) {
+            resetRegistration()
+        }
     }
 
     private fun OnboardingField.isValid(): Boolean = when (this) {
         OnboardingField.FIRST_NAME -> state.firstName.isNotBlank()
         OnboardingField.LAST_NAME -> state.lastName.isNotBlank()
-        OnboardingField.EMAIL_ADDRESS -> emailIsValid()
-    }
-
-    private fun emailIsValid(): Boolean = if (state.emailAddress.isBlank()) {
-        false
-    } else {
-        val parts = state.emailAddress.split('@')
-        println("_DEBUG: $parts")
-        val result = if (parts.count() != 2)
-            false
-        else {
-            val domainParts = parts[1].split('.')
-            domainParts.count() >= 2 && domainParts[1].isNotBlank()
-        }
-        println("_DEBUG isValidEmail: $result")
-        result
+        OnboardingField.EMAIL_ADDRESS -> state.emailAddress.isProbablyValidEmail()
     }
 }
 
