@@ -13,19 +13,23 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
+    background = Primary2,
     primary = Primary2,
+    onPrimary = Highlight1,
     secondary = Secondary2,
+    onSecondary = Primary1,
     tertiary = Highlight2
 )
 
 private val LightColorScheme = lightColorScheme(
+    background = Primary1,
     primary = Primary1,
+    onPrimary = Highlight2,
     secondary = Secondary1,
+    onSecondary = Primary2,
     tertiary = Highlight1
 )
 
