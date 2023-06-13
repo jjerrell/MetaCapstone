@@ -7,7 +7,7 @@
     <string name="form_first_name">First name</string>
     <string name="registration_hero">Tell us a little about yourself</string>
     <string name="button_register">Register</string>
-    <string name="form_input_invalid">Invalid form input:</string>
+    <string name="form_input_invalid">Registration Failed!</string>
     <string name="form_first_name_invalid">- First name is blank</string>
     <string name="form_last_name_invalid">- Last name is blank</string>
     <string name="form_email_invalid">- Email is invalid</string>
