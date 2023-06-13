@@ -20,6 +20,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument(key = "room.schemaLocation", value = "$projectDir/schemas")
+            }
+        }
     }
 
     buildTypes {
@@ -58,7 +64,7 @@ dependencies {
     val navVersion = "2.5.3"
     val ktorVersion = "2.1.3"
     val roomVersion = "2.5.1"
-    val glideVersion = "4.14.2"
+    val coilVersion = "2.4.0"
 
     implementation(composeBom)
 
@@ -87,9 +93,9 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 
-    // glide
-    implementation("com.github.bumptech.glide:glide:$glideVersion")
-    ksp("com.github.bumptech.glide:ksp:$glideVersion")
+    // Coil
+    implementation("io.coil-kt:coil:$coilVersion")
+    implementation("io.coil-kt:coil-compose:$coilVersion")
 
     // test
     testImplementation("junit:junit:4.13.2")
