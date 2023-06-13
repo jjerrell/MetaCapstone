@@ -7,6 +7,7 @@ import app.jjerrell.meta.course.sample.littlelemon.domain.database.provideUserDa
 import app.jjerrell.meta.course.sample.littlelemon.domain.network.model.UserRegistration
 import app.jjerrell.meta.course.sample.littlelemon.domain.network.provideMenuItemNetworkService
 import app.jjerrell.meta.course.sample.littlelemon.ktorHttpClient
+import app.jjerrell.meta.course.sample.littlelemon.util.string.isProbablyValidEmail
 import app.jjerrell.meta.course.sample.littlelemon.ui.model.MenuItemAndroid
 
 class LittleLemonUseCase private constructor(context: Context) {
@@ -31,7 +32,14 @@ class LittleLemonUseCase private constructor(context: Context) {
 
     suspend fun registerUser(
         user: UserRegistration
-    ) = repository.register(user)
+    ) {
+        if (user.firstName.isNotBlank()
+            && user.lastName.isNotBlank()
+            && user.email.isProbablyValidEmail()
+        ) {
+            repository.register(user)
+        }
+    }
 
     suspend fun logout(invokeOnCompletion: () -> Unit) =
         repository.logout(invokeOnCompletion)
@@ -55,5 +63,5 @@ private fun MenuItemEntity.convertToAndroid() = MenuItemAndroid(
     description = this.description,
     category = MenuItemAndroid.Category.fromServiceName(this.category),
     imageUri = this.image,
-    price = this.price.toDoubleOrNull() ?: 8.99
+    price = (this.price.toDoubleOrNull() ?: 10.00)
 )
