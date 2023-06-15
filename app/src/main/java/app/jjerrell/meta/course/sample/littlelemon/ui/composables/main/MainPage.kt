@@ -13,10 +13,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLButton
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.MenuListItem
@@ -169,20 +168,18 @@ private fun FilterRow(
         horizontalArrangement = Arrangement.Center
     ) {
         item {
-            TextButton(
+            LLButton(
                 onClick = { onSelectCategory(null) },
-                elevation = if (categoryFilter == null) ButtonDefaults.buttonElevation(defaultElevation = 4.dp) else null
-            ) {
-                Text("All")
-            }
+                enabled = categoryFilter != null,
+                title = stringResource(R.string.all_filter),
+            )
         }
         items(categories.toList()) { category ->
-            TextButton(
+            LLButton(
                 onClick = { onSelectCategory(category) },
-                elevation = if (categoryFilter == category) ButtonDefaults.buttonElevation(defaultElevation = 4.dp) else null
-            ) {
-                Text(category.name)
-            }
+                enabled = categoryFilter != category,
+                title = category.name
+            )
         }
     }
 }

@@ -1,6 +1,5 @@
 package app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLButton
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.PageLoadingIndicator
@@ -103,7 +102,7 @@ fun OnboardingPage(
                 }
             }
             item {
-                Button(
+                LLButton(
                     onClick = {
                         focusManager.clearFocus()
                         viewModel.register(context = context)
@@ -112,15 +111,8 @@ fun OnboardingPage(
                         .fillMaxWidth()
                         .height(40.dp)
                         .padding(horizontal = 20.dp),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                     enabled = !viewModel.state.isLoading,
-                    content = {
-                        Text(
-                            stringResource(R.string.button_register),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                    }
+                    title = stringResource(R.string.button_register)
                 )
                 Spacer(modifier = Modifier.height(30.dp))
             }
