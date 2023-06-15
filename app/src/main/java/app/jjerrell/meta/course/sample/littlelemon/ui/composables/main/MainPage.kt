@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
@@ -58,8 +60,9 @@ fun MainPage(
         )
         if (state.value.isLoading) {
             PageLoadingIndicator(
+                modifier = Modifier.fillMaxHeight(),
                 isLoading = true,
-                onInitialize = {
+                onLoadingStateChange = {
                     viewModel.fetchMenuItems(context = context)
                 }
             )
@@ -79,7 +82,13 @@ fun MainPage(
                     TextField(
                         value = state.value.searchContent,
                         onValueChange = { viewModel.updateSearchContent(it) },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        label = {
+                            Text(
+                                text = stringResource(R.string.search_label),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     )
                     FilterRow(
                         modifier = Modifier.fillMaxWidth(),
