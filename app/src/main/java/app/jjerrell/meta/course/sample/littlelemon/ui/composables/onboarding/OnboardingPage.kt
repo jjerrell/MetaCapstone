@@ -2,24 +2,21 @@ package app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -28,14 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.PageLoadingIndicator
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.RegistrationFormFields
 import app.jjerrell.meta.course.sample.littlelemon.ui.theme.LittleLemonTheme
 
 @Composable
@@ -55,62 +52,78 @@ fun OnboardingPage(
             LLTopAppBar()
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = modifier
                 .padding(paddingValues)
-                .imePadding()
+                .imePadding() // allows the view to adjust itself when the keyboard is open (targetApi = tiramisu)
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround
         ) {
-            LLHero(
-                modifier = Modifier
-                    .fillMaxHeight(0.25F),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.registration_hero),
-                    color = MaterialTheme.colorScheme.tertiary,
-                    style = MaterialTheme.typography.headlineLarge
+            item {
+                LLHero(
+                    modifier = Modifier
+                        .heightIn(min = 120.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.registration_hero),
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+            }
+            item {
+                if (viewModel.state.registrationFailed) {
+                    Text(
+                        text = stringResource(R.string.form_input_invalid),
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+                RegistrationFormFields(
+                    modifier = Modifier
+                        .fillMaxHeight(),
+                    isEnabled = !viewModel.state.isLoading,
+                    firstName = viewModel.state.firstName,
+                    lastName = viewModel.state.lastName,
+                    email = viewModel.state.emailAddress,
+                    invalidFields = viewModel.invalidFields.toList(),
+                    updateFirstName = { viewModel.update(OnboardingField.FIRST_NAME, it) },
+                    updateLastName = { viewModel.update(OnboardingField.LAST_NAME, it) },
+                    updateEmail = { viewModel.update(OnboardingField.EMAIL_ADDRESS, it) },
+                    whenDone = {
+                        focusManager.clearFocus()
+                        viewModel.register(context = context)
+                    }
                 )
-            }
-            when (viewModel.state.registrationFailed) {
-                true -> Text(stringResource(R.string.form_input_invalid))
-                else -> {}
-            }
-            RegistrationFormFields(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1F),
-                isLoading = viewModel.state.isLoading,
-                firstName = viewModel.state.firstName,
-                lastName = viewModel.state.lastName,
-                email = viewModel.state.emailAddress,
-                invalidFields = viewModel.invalidFields.toList(),
-                updateFirstName = { viewModel.update(OnboardingField.FIRST_NAME, it) },
-                updateLastName = { viewModel.update(OnboardingField.LAST_NAME, it) },
-                updateEmail = { viewModel.update(OnboardingField.EMAIL_ADDRESS, it) },
-                whenDone = {
-                    focusManager.clearFocus()
-                    viewModel.register(context = context)
+                if (viewModel.state.isLoading) {
+                    PageLoadingIndicator()
                 }
-            )
-            Button(
-                onClick = {
-                    focusManager.clearFocus()
-                    viewModel.register(context = context)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .padding(horizontal = 20.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                enabled = !viewModel.state.isLoading,
-                content = {
-                    Text(stringResource(R.string.button_register))
-                }
-            )
-            Spacer(modifier = Modifier.height(30.dp))
+            }
+            item {
+                Button(
+                    onClick = {
+                        focusManager.clearFocus()
+                        viewModel.register(context = context)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .padding(horizontal = 20.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                    enabled = !viewModel.state.isLoading,
+                    content = {
+                        Text(
+                            stringResource(R.string.button_register),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.tertiary,
+                        )
+                    }
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+            }
         }
     }
     /**
@@ -121,81 +134,6 @@ fun OnboardingPage(
             onRegistrationSuccess()
         }
         else -> {}
-    }
-}
-
-/**
- * Collection of form fields used to register the user for the application
- *
- * Uses the [state hoisting](https://developer.android.com/jetpack/compose/state#state-hoisting)
- * pattern to perform read/write activities.
- */
-@Composable
-@ExperimentalComposeUiApi
-private fun RegistrationFormFields(
-    modifier: Modifier = Modifier,
-    isLoading: Boolean,
-    firstName: String,
-    lastName: String,
-    email: String,
-    invalidFields: List<OnboardingField>,
-    updateFirstName: (String) -> Unit,
-    updateLastName: (String) -> Unit,
-    updateEmail: (String) -> Unit,
-    whenDone: () -> Unit
-) {
-    Column(
-        modifier = modifier
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        TextField(
-            value = firstName,
-            enabled = !isLoading,
-            onValueChange = { updateFirstName(it) },
-            modifier = Modifier.fillMaxWidth(),
-            label = {
-                Text(stringResource(R.string.form_first_name))
-            },
-            isError = invalidFields.contains(OnboardingField.FIRST_NAME)
-        )
-        TextField(
-            value = lastName,
-            enabled = !isLoading,
-            onValueChange = { updateLastName(it) },
-            modifier = Modifier.fillMaxWidth(),
-            label = {
-                Text(stringResource(R.string.form_last_name))
-            },
-            isError = invalidFields.contains(OnboardingField.LAST_NAME)
-        )
-        TextField(
-            value = email,
-            enabled = !isLoading,
-            onValueChange = { updateEmail(it) },
-            modifier = Modifier.fillMaxWidth(),
-            label = {
-                Text(stringResource(R.string.form_email_address))
-            },
-            isError = invalidFields.contains(OnboardingField.EMAIL_ADDRESS),
-            keyboardOptions = KeyboardOptions(
-                autoCorrect = false,
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = { whenDone() }
-            )
-        )
-        if (isLoading) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(12.dp))
-                CircularProgressIndicator()
-            }
-        }
     }
 }
 
