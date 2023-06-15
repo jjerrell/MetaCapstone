@@ -1,18 +1,5 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
 .DS_Store
-/build
 /captures
-.externalNativeBuild
-.cxx
-local.properties
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij,androidstudio,gradle,maven
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij,androidstudio,gradle,maven
@@ -51,14 +38,14 @@ local.properties
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
 
 # CMake
 cmake-build-*/
@@ -216,7 +203,6 @@ proguard/
 /*/*/production
 captures/
 .navigation/
-*.ipr
 *~
 *.swp
 
@@ -237,7 +223,6 @@ gen-external-apklibs
 obj/
 
 # IntelliJ IDEA
-*.iml
 /out/
 
 # User-specific configurations
@@ -247,11 +232,9 @@ obj/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/.name
-.idea/compiler.xml
 .idea/copyright/profiles_settings.xml
 .idea/encodings.xml
 .idea/misc.xml
-.idea/modules.xml
 .idea/scopes/scope_settings.xml
 .idea/dictionaries
 .idea/vcs.xml
@@ -263,7 +246,6 @@ obj/
 .idea/uiDesigner.xml
 .idea/assetWizardSettings.xml
 .idea/gradle.xml
-.idea/jarRepositories.xml
 .idea/navEditor.xml
 
 # Legacy Eclipse project files
@@ -296,3 +278,4 @@ hs_err_pid*
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,androidstudio,gradle,maven
+/UX/assets/PG_LittleLemon_StyleGuide.heic
