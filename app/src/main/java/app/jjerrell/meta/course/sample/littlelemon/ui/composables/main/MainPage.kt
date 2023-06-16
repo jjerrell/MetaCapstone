@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,11 +26,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLButton
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTextField
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.MenuListItem
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.PageLoadingIndicator
@@ -78,9 +79,9 @@ fun MainPage(
                             state.value.menuItems.map { it.category }.toSet()
                         )
                     }
-                    TextField(
-                        value = state.value.searchContent,
-                        onValueChange = { viewModel.updateSearchContent(it) },
+                    LLTextField(
+                        value = TextFieldValue(state.value.searchContent),
+                        onValueChange = { viewModel.updateSearchContent(it.text) },
                         modifier = Modifier.fillMaxWidth(),
                         label = {
                             Text(

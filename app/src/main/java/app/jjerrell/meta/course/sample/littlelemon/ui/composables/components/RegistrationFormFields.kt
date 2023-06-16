@@ -8,13 +8,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import app.jjerrell.meta.course.sample.littlelemon.R
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.OnboardingField
@@ -44,10 +44,10 @@ fun RegistrationFormFields(
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        TextField(
-            value = firstName,
+        LLTextField(
+            value = TextFieldValue(firstName),
             enabled = isEnabled,
-            onValueChange = { updateFirstName(it) },
+            onValueChange = { updateFirstName(it.text) },
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(
@@ -57,10 +57,10 @@ fun RegistrationFormFields(
             },
             isError = invalidFields.contains(OnboardingField.FIRST_NAME)
         )
-        TextField(
-            value = lastName,
+        LLTextField(
+            value = TextFieldValue(lastName),
             enabled = isEnabled,
-            onValueChange = { updateLastName(it) },
+            onValueChange = { updateLastName(it.text) },
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(
@@ -70,10 +70,10 @@ fun RegistrationFormFields(
             },
             isError = invalidFields.contains(OnboardingField.LAST_NAME)
         )
-        TextField(
-            value = email,
+        LLTextField(
+            value = TextFieldValue(email),
             enabled = isEnabled,
-            onValueChange = { updateEmail(it) },
+            onValueChange = { updateEmail(it.text) },
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(

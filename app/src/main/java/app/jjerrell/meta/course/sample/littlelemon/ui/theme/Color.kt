@@ -1,5 +1,6 @@
 package app.jjerrell.meta.course.sample.littlelemon.ui.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
 val Primary1 = Color(0xFF495E57)
@@ -10,3 +11,6 @@ val Secondary2 = Color(0xFFFBDABB)
 
 val Highlight1 = Color(0xFFEDEFEE)
 val Highlight2 = Color(0xFF333333)
+
+val ColorScheme.textFieldContainer: Color
+    get() = Color(0xFFDCDCDC)
