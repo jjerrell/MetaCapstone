@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import app.jjerrell.meta.course.sample.littlelemon.R
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.OnboardingField
@@ -45,9 +44,9 @@ fun RegistrationFormFields(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         LLTextField(
-            value = TextFieldValue(firstName),
-            enabled = isEnabled,
-            onValueChange = { updateFirstName(it.text) },
+            value = firstName,
+            readOnly = !isEnabled,
+            onValueChange = { updateFirstName(it) },
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(
@@ -58,9 +57,9 @@ fun RegistrationFormFields(
             isError = invalidFields.contains(OnboardingField.FIRST_NAME)
         )
         LLTextField(
-            value = TextFieldValue(lastName),
-            enabled = isEnabled,
-            onValueChange = { updateLastName(it.text) },
+            value = lastName,
+            readOnly = !isEnabled,
+            onValueChange = { updateLastName(it) },
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(
@@ -71,9 +70,9 @@ fun RegistrationFormFields(
             isError = invalidFields.contains(OnboardingField.LAST_NAME)
         )
         LLTextField(
-            value = TextFieldValue(email),
-            enabled = isEnabled,
-            onValueChange = { updateEmail(it.text) },
+            value = email,
+            readOnly = !isEnabled,
+            onValueChange = { updateEmail(it) },
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(

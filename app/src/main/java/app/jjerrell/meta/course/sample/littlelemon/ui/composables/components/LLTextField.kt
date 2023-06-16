@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,16 +37,8 @@ object LLTextFieldDefaults {
 
     @Composable
     fun colors(
-        focusedBorderColor: Color = MaterialTheme.colorScheme.onSecondary,
-        unfocusedBorderColor: Color = MaterialTheme.colorScheme.primary,
-        disabledBorderColor: Color = MaterialTheme.colorScheme.onPrimary,
-        errorBorderColor: Color = MaterialTheme.colorScheme.secondary,
         containerColor: Color = MaterialTheme.colorScheme.textFieldContainer
     ): TextFieldColors = OutlinedTextFieldDefaults.colors(
-        focusedBorderColor = focusedBorderColor,
-        unfocusedBorderColor = unfocusedBorderColor,
-        disabledBorderColor = disabledBorderColor,
-        errorBorderColor = errorBorderColor,
         focusedContainerColor = containerColor,
         unfocusedContainerColor = containerColor,
         disabledContainerColor = containerColor,
@@ -57,8 +48,8 @@ object LLTextFieldDefaults {
 
 @Composable
 fun LLTextField(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -121,28 +112,28 @@ private fun LLTextField_Preview() {
                 verticalArrangement = Arrangement.spacedBy(60.dp)
             ) {
                 LLTextField(
-                    value = TextFieldValue(input),
-                    onValueChange = { input = it.text }
+                    value = input,
+                    onValueChange = { input = it }
                 )
                 LLTextField(
-                    value = TextFieldValue(),
+                    value = "",
                     onValueChange = { },
                     placeholder = {
                         Text("Placeholder Text")
                     }
                 )
                 LLTextField(
-                    value = TextFieldValue("Error"),
+                    value = "Error",
                     onValueChange = { },
                     isError = true
                 )
                 LLTextField(
-                    value = TextFieldValue("Read Only"),
+                    value = "Read Only",
                     onValueChange = { },
                     readOnly = true
                 )
                 LLTextField(
-                    value = TextFieldValue("Disabled"),
+                    value = "Disabled",
                     onValueChange = { },
                     enabled = false
                 )

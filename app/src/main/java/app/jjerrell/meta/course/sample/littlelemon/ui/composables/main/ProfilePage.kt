@@ -1,5 +1,6 @@
 package app.jjerrell.meta.course.sample.littlelemon.ui.composables.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -58,6 +59,7 @@ fun ProfilePage(
             else -> {
                 LazyColumn(
                     modifier = modifier
+                        .background(MaterialTheme.colorScheme.primary)
                         .fillMaxSize()
                         .padding(top = 8.dp, bottom = 30.dp)
                         .padding(horizontal = 20.dp),
