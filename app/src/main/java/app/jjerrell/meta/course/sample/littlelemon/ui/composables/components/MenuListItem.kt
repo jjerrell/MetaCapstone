@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,10 +33,11 @@ fun MenuListItem(
     usePrimaryColor: Boolean,
     item: MenuItemAndroid
 ) {
-    val fallbackPainter = MenuItemAndroid.defaultMenu
-        .find { it.title == item.title }
-        ?.localResource
-        ?.let { painterResource(id = it) }
+    val fallbackResource = remember {
+        MenuItemAndroid.defaultMenu.find {
+            it.title == item.title
+        }?.localResource
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -58,7 +60,7 @@ fun MenuListItem(
             }
             Text(
                 text = item.title,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleSmall,
                 color = textColor
             )
             Text(
@@ -68,20 +70,23 @@ fun MenuListItem(
             )
             Text(
                 text = item.priceString,
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.labelLarge,
                 color = textColor
             )
         }
         // capture for dishes with bad image data (as of 06/12/2023)
-        if (item.hasBadImage && fallbackPainter != null) {
-            Image(
-                painter = fallbackPainter,
-                contentDescription = null, // stylistic content
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20))
-                    .weight(1f),
-                contentScale = ContentScale.Fit
-            )
+        val fallbackPainter = fallbackResource?.let { painterResource(id = it) }
+        if (item.hasBadImage) {
+            fallbackPainter?.let {
+                Image(
+                    painter = it,
+                    contentDescription = null, // stylistic content
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20))
+                        .weight(1f),
+                    contentScale = ContentScale.Fit
+                )
+            }
         } else {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)

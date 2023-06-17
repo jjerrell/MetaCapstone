@@ -13,4 +13,7 @@
     <string name="form_email_invalid">- Email is invalid</string>
     <string name="button_close">Close</string>
     <string name="profile_image_description">View profile and settings</string>
+    <string name="search_label">Search</string>
+    <string name="logout_button">Logout</string>
+    <string name="all_filter">All</string>
 </resources>
