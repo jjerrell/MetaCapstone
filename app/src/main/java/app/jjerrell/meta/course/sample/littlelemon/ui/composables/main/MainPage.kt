@@ -6,17 +6,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,10 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.jjerrell.meta.course.sample.littlelemon.R
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLButton
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLHero
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTextField
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.LLTopAppBar
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.MenuListItem
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.components.PageLoadingIndicator
@@ -47,7 +49,9 @@ fun MainPage(
     val context = LocalContext.current
     val state = viewModel.stateFlow.collectAsState()
     val items = viewModel.menuItems.collectAsState(emptyList())
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         LLTopAppBar(
             actions = {
                 ProfileIconNavItem(
@@ -58,16 +62,25 @@ fun MainPage(
         )
         if (state.value.isLoading) {
             PageLoadingIndicator(
+                modifier = Modifier.fillMaxHeight(),
                 isLoading = true,
-                onInitialize = {
+                onLoadingStateChange = {
                     viewModel.fetchMenuItems(context = context)
                 }
             )
         } else {
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.primary),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 // present the hero content
                 item {
-                    MainPageHero()
+                    MainPageHero(
+                        modifier = Modifier
+                            .padding(12.dp)
+                    )
                 }
                 // pin the search and filter components after the hero scrolls out of view
                 stickyHeader {
@@ -76,13 +89,25 @@ fun MainPage(
                             state.value.menuItems.map { it.category }.toSet()
                         )
                     }
-                    TextField(
+                    LLTextField(
                         value = state.value.searchContent,
                         onValueChange = { viewModel.updateSearchContent(it) },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.primary)
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        label = {
+                            Text(
+                                text = stringResource(R.string.search_label),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     )
                     FilterRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.primary)
+                            .fillMaxWidth()
+                            .padding(4.dp),
                         categories = availableCategories
                             .filter { category ->
                                 state.value.menuItems.any { it.category == category }
@@ -114,7 +139,7 @@ private fun MainPageHero(
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 4.dp, vertical = 16.dp)
+                .padding(vertical = 16.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -155,25 +180,23 @@ private fun FilterRow(
     onSelectCategory: (MenuItemAndroid.Category?) -> Unit
 ) {
     LazyRow(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.tertiary),
-        horizontalArrangement = Arrangement.Center
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         item {
-            TextButton(
+            LLButton(
                 onClick = { onSelectCategory(null) },
-                elevation = if (categoryFilter == null) ButtonDefaults.buttonElevation(defaultElevation = 4.dp) else null
-            ) {
-                Text("All")
-            }
+                enabled = categoryFilter != null,
+                title = stringResource(R.string.all_filter),
+            )
         }
         items(categories.toList()) { category ->
-            TextButton(
+            LLButton(
                 onClick = { onSelectCategory(category) },
-                elevation = if (categoryFilter == category) ButtonDefaults.buttonElevation(defaultElevation = 4.dp) else null
-            ) {
-                Text(category.name)
-            }
+                enabled = categoryFilter != category,
+                title = category.name
+            )
         }
     }
 }

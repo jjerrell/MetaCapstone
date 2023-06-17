@@ -5,11 +5,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.CheckOnboarding
+import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.CheckOnboardingPage
 import app.jjerrell.meta.course.sample.littlelemon.ui.composables.onboarding.OnboardingPage
 
 /**
- * Enrollment navigation "module". Begins with the  [CheckOnboarding] view where the app
+ * Enrollment navigation "module". Begins with the  [CheckOnboardingPage] view where the app
  * decides whether to ask the user to register or to move on to the [mainNavigation] module
  * because the app determines that the user is registered
  *
@@ -26,7 +26,7 @@ fun NavGraphBuilder.enrollmentNavigation(controller: NavController) {
         // registration status to determine the actual starting route
         // for the users experience
         page(appRoute = AppFlowRoute.CHECK_ONBOARDING) {
-            CheckOnboarding(onResult = { isRegistered: Boolean ->
+            CheckOnboardingPage(onResult = { isRegistered: Boolean ->
                 if (isRegistered) {
                     controller.navigate(AppFlow.MAIN)
                 } else {

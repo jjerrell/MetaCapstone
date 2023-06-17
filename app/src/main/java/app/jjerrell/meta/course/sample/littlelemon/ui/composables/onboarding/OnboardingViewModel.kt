@@ -46,14 +46,19 @@ class OnboardingViewModel : ViewModel() {
                     )
                     useCase.registration.collect {
                         state = if (it == null) state.copy(
+                            isLoading = false,
                             registrationFailed = true
                         ) else state.copy(
+                            isLoading = false,
                             isRegistered = true
                         )
                     }
             }
         } else {
-            state = state.copy(registrationFailed = true)
+            state = state.copy(
+                isLoading = false,
+                registrationFailed = true
+            )
         }
     }
 
