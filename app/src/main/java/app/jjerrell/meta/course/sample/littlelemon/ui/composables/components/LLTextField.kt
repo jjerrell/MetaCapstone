@@ -1,6 +1,9 @@
 package app.jjerrell.meta.course.sample.littlelemon.ui.composables.components
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -9,16 +12,18 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,19 +35,46 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.jjerrell.meta.course.sample.littlelemon.ui.theme.textFieldContainer
 import app.jjerrell.meta.course.sample.littlelemon.ui.theme.LittleLemonTheme
+import app.jjerrell.meta.course.sample.littlelemon.ui.theme.Primary1
+import app.jjerrell.meta.course.sample.littlelemon.ui.theme.Secondary1
 
 @Immutable
 object LLTextFieldDefaults {
     val shape: Shape = RoundedCornerShape(8.dp)
 
     @Composable
+    fun borderColor(
+        enabled: Boolean,
+        isError: Boolean,
+        interactionSource: InteractionSource
+    ): State<Color> {
+        val focused by interactionSource.collectIsFocusedAsState()
+
+        return rememberUpdatedState(
+            when {
+                !enabled -> Primary1
+                isError -> Secondary1
+                focused -> Primary1
+                else -> Primary1
+            }
+        )
+    }
+
+    @Composable
     fun colors(
-        containerColor: Color = MaterialTheme.colorScheme.textFieldContainer
-    ): TextFieldColors = OutlinedTextFieldDefaults.colors(
+        containerColor: Color = MaterialTheme.colorScheme.textFieldContainer,
+        indicatorColor: Color = Color.Transparent,
+        errorTextColor: Color = Color.Red
+    ): TextFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = containerColor,
         unfocusedContainerColor = containerColor,
         disabledContainerColor = containerColor,
-        errorContainerColor = containerColor
+        errorContainerColor = containerColor,
+        disabledIndicatorColor = indicatorColor,
+        errorIndicatorColor = indicatorColor,
+        focusedIndicatorColor = indicatorColor,
+        unfocusedIndicatorColor = indicatorColor,
+        errorTextColor = errorTextColor
     )
 }
 
@@ -72,10 +104,19 @@ fun LLTextField(
     shape: Shape = LLTextFieldDefaults.shape,
     colors: TextFieldColors = LLTextFieldDefaults.colors()
 ) {
-   OutlinedTextField(
+   TextField(
        value = value,
        onValueChange = onValueChange,
-       modifier = modifier,
+       modifier = modifier
+           .border(
+               1.dp,
+               LLTextFieldDefaults.borderColor(
+                   enabled = enabled,
+                   isError = isError,
+                   interactionSource = interactionSource
+               ).value,
+               shape = LLTextFieldDefaults.shape
+           ),
        enabled = enabled,
        readOnly = readOnly,
        textStyle = textStyle,
@@ -130,6 +171,9 @@ private fun LLTextField_Preview() {
                 LLTextField(
                     value = "Read Only",
                     onValueChange = { },
+                    label = {
+                        Text("Placeholder Text")
+                    },
                     readOnly = true
                 )
                 LLTextField(

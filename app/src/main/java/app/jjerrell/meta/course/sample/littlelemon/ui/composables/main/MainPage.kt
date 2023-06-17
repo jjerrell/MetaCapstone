@@ -93,6 +93,7 @@ fun MainPage(
                         value = state.value.searchContent,
                         onValueChange = { viewModel.updateSearchContent(it) },
                         modifier = Modifier
+                            .background(MaterialTheme.colorScheme.primary)
                             .fillMaxWidth()
                             .padding(12.dp),
                         label = {
